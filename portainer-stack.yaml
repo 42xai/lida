@@ -2,6 +2,7 @@ version: '3.8'
 services:
   lida:
     image: ghcr.io/42xai/lida:main
+    container_name: lida
     ports:
       - 8888:8080
     networks:
