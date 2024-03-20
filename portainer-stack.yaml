@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  lida:
+    image: ghcr.io/42xai/lida:main
+    ports:
+      - 8888:8080
+    networks:
+      - management_common
+    env_file:
+      - ../stack.env
+
+networks:
+  management_common:
+    external: true
