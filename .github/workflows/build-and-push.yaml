@@ -47,8 +47,13 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  deploy-to-portainer:
-    needs: build-and-push
-    name: Deploy to Portainer
-    uses: 42xai/platform-utils/.github/workflows/deploy-to-portainer.yaml@main
-    secrets: inherit
+  call-portainer-webhook:
+    name: Deploy to portainer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call Portainer webhook
+        run: |
+          WEBHOOK_URL=${{ secrets.PORTAINER_WEBHOOK }}
+
+          curl -X POST --max-time 60 --fail --show-error --silent -w "%{http_code}" "$WEBHOOK_URL"
