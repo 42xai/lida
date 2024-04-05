@@ -11,8 +11,10 @@ WORKDIR /app
 # Install requirements
 RUN pip install --no-cache-dir lida
 
+COPY . .
+
 # Expose the port that the application will listen on 
 EXPOSE 8080
 
 # Start the Web UI
-CMD ["lida", "ui", "--host", "0.0.0.0", "--port", "8080", "--docs"]
+CMD ["uvicorn", "lida.web.app:app", "--host", "0.0.0.0", "--port", "8080"]

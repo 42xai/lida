@@ -192,7 +192,14 @@ class Manager(object):
         textgen_config: TextGenerationConfig = TextGenerationConfig(),
         library="seaborn",
         return_error: bool = False,
+        data = None,
     ):
+        if isinstance(data, str):
+            data = read_dataframe(data)
+
+        if data is None:
+            data = self.data
+
         if isinstance(goal, dict):
             goal = Goal(**goal)
         if isinstance(goal, str):
@@ -204,7 +211,7 @@ class Manager(object):
             library=library)
         charts = self.execute(
             code_specs=code_specs,
-            data=self.data,
+            data=data,
             summary=summary,
             library=library,
             return_error=return_error,

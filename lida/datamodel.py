@@ -118,6 +118,7 @@ class VisualizeWebRequest:
     summary: Summary
     goal: Goal
     library: str = "seaborn"
+    source: str = None
     textgen_config: Optional[TextGenerationConfig] = field(
         default_factory=TextGenerationConfig
     )

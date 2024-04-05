@@ -11,6 +11,8 @@ from llmx import llm, providers
 from ..datamodel import GoalWebRequest, SummaryUrlRequest, TextGenerationConfig, UploadUrl, VisualizeEditWebRequest, VisualizeEvalWebRequest, VisualizeExplainWebRequest, VisualizeRecommendRequest, VisualizeRepairWebRequest, VisualizeWebRequest, InfographicsRequest
 from ..components import Manager
 
+from urllib.parse import urljoin, urlparse
+
 
 # instantiate model and generator
 textgen = llm()
@@ -51,13 +53,26 @@ api.mount("/files", StaticFiles(directory=files_static_root, html=True), name="f
 @api.post("/visualize")
 async def visualize_data(req: VisualizeWebRequest) -> dict:
     """Generate goals given a dataset summary"""
+
+    if req.source is not None:
+        file_name = urlparse(req.source).path.split("/")[-1]
+        file_location = os.path.join(data_folder, file_name)
+
+        # download file
+        if not os.path.exists(file_location):
+            url_response = requests.get(req.source, allow_redirects=True, timeout=1000)
+            open(file_location, "wb").write(url_response.content)
+
     try:
         # print(req.textgen_config)
         charts = lida.visualize(
             summary=req.summary,
             goal=req.goal,
             textgen_config=req.textgen_config if req.textgen_config else TextGenerationConfig(),
-            library=req.library, return_error=True)
+            library=req.library,
+            return_error=True,
+            data=file_location)
+        
         print("found charts: ", len(charts), " for goal: ")
         if len(charts) == 0:
             return {"status": False, "message": "No charts generated"}
