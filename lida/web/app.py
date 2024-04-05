@@ -11,7 +11,7 @@ from llmx import llm, providers
 from ..datamodel import GoalWebRequest, SummaryUrlRequest, TextGenerationConfig, UploadUrl, VisualizeEditWebRequest, VisualizeEvalWebRequest, VisualizeExplainWebRequest, VisualizeRecommendRequest, VisualizeRepairWebRequest, VisualizeWebRequest, InfographicsRequest
 from ..components import Manager
 
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urlparse
 
 
 # instantiate model and generator
