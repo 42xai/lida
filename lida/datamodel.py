@@ -196,6 +196,7 @@ class ChartExecutorResponse:
     code: str  # code used to generate the visualization
     library: str  # library used to generate the visualization
     error: Optional[Dict] = None  # error message if status is False
+    filtered_data: Optional[Dict] = None
 
     def _repr_mimebundle_(self, include=None, exclude=None):
         bundle = {"text/plain": self.code}

@@ -22,11 +22,11 @@ def preprocess_code(code: str) -> str:
     code = code.replace("<transforms>", "")
 
     # remove all text after chart = plot(data)
-    if "chart = plot(data)" in code:
+    if "chart = plot(filtered_data)" in code:
         # print(code)
-        index = code.find("chart = plot(data)")
+        index = code.find("chart = plot(filtered_data)")
         if index != -1:
-            code = code[: index + len("chart = plot(data)")]
+            code = code[: index + len("chart = plot(filtered_data)")]
 
     if "```" in code:
         pattern = r"```(?:\w+\n)?([\s\S]+?)```"
@@ -43,8 +43,8 @@ def preprocess_code(code: str) -> str:
             code = code[index:]
 
     code = code.replace("```", "")
-    if "chart = plot(data)" not in code:
-        code = code + "\nchart = plot(data)"
+    if "chart = plot(filtered_data)" not in code:
+        code = code + "\nchart = plot(filtered_data)"
     return code
 
 
@@ -74,7 +74,7 @@ def get_globals_dict(code_string, data):
         else:
             globals_dict[module_name.split(".")[-1]] = obj
 
-    ex_dicts = {"pd": pd, "data": data, "plt": plt}
+    ex_dicts = {"pd": pd, "data": data, "plt": plt, "filtered_data": None}
     globals_dict.update(ex_dicts)
     return globals_dict
 
@@ -155,6 +155,9 @@ class ChartExecutor:
                     # print(ex_locals)
                     exec(code, ex_locals)
                     chart = ex_locals["chart"]
+                    filtered_data = ex_locals["filtered_data"]
+                    filtered_data = filtered_data.to_dict('split')
+                    print(filtered_data)
                     if plt:
                         buf = io.BytesIO()
                         plt.box(False)
@@ -177,6 +180,7 @@ class ChartExecutor:
                             raster=plot_data,
                             code=code,
                             library=library,
+                            filtered_data=filtered_data
                         )
                     )
                 except Exception as exception_error:

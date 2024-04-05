@@ -50,14 +50,22 @@ import pandas as pd
 import matplotlib.pyplot as plt
 <imports>
 # solution plan
-# i.  ..
-def plot(data: pd.DataFrame):
+# i.  (Example: Create a bar chart showing... )
+# ii. (Example: Select the "field name" field for x-axis...)
+
+# transform the data using pandas
+def transform_data(data: pd.DataFrame):
+    mutated_data = ...
+    return mutated_data
+
+def plot(data):
 
     <stub> # only modify this section
     plt.title('{goal.question}', wrap=True)
     return plt;
 
-chart = plot(data) # data already contains the data to be plotted. Always include this line. No additional code beyond this line."""
+filtered_data = transform_data(data)
+chart = plot(filtered_data) # data already contains the data to be plotted. Always include this line. No additional code beyond this line."""
 
         elif library == "ggplot":
             instructions = {
