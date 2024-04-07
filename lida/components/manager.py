@@ -18,6 +18,7 @@ from ..components.goal import GoalExplorer
 from ..components.persona import PersonaExplorer
 from ..components.executor import ChartExecutor
 from ..components.viz import VizGenerator, VizEditor, VizExplainer, VizEvaluator, VizRepairer, VizRecommender
+from ..components.transform import TransformData
 
 import lida.web as lida
 
@@ -39,6 +40,7 @@ class Manager(object):
         self.summarizer = Summarizer()
         self.goal = GoalExplorer()
         self.vizgen = VizGenerator()
+        self.transform = TransformData()
         self.vizeditor = VizEditor()
         self.executor = ChartExecutor()
         self.explainer = VizExplainer()
@@ -206,9 +208,16 @@ class Manager(object):
             goal = Goal(question=goal, visualization=goal, rationale="")
 
         self.check_textgen(config=textgen_config)
-        code_specs = self.vizgen.generate(
-            summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,
-            library=library)
+
+        if library == "sqlike":
+            code_specs = self.transform.generate(
+                summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,
+                library=library)
+        else:
+            code_specs = self.vizgen.generate(
+                summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,
+                library=library)
+            
         charts = self.execute(
             code_specs=code_specs,
             data=data,

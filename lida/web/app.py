@@ -54,6 +54,8 @@ api.mount("/files", StaticFiles(directory=files_static_root, html=True), name="f
 async def visualize_data(req: VisualizeWebRequest) -> dict:
     """Generate goals given a dataset summary"""
 
+    file_location = None
+    
     if req.source is not None:
         file_name = urlparse(req.source).path.split("/")[-1]
         file_location = os.path.join(data_folder, file_name)

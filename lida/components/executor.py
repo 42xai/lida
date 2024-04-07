@@ -5,7 +5,7 @@ import io
 import os
 import re
 import traceback
-from typing import Any, List
+from typing import Any, Dict, List, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -14,7 +14,7 @@ import plotly.io as pio
 from lida.datamodel import ChartExecutorResponse, Summary
 
 
-def preprocess_code(code: str) -> str:
+def preprocess_code(code: str, library: str) -> str:
     """Preprocess code to remove any preamble and explanation text"""
 
     code = code.replace("<imports>", "")
@@ -43,8 +43,10 @@ def preprocess_code(code: str) -> str:
             code = code[index:]
 
     code = code.replace("```", "")
-    if "chart = plot(filtered_data)" not in code:
+    
+    if library != "sqlike" and "chart = plot(filtered_data)" not in code:
         code = code + "\nchart = plot(filtered_data)"
+        
     return code
 
 
@@ -74,7 +76,7 @@ def get_globals_dict(code_string, data):
         else:
             globals_dict[module_name.split(".")[-1]] = obj
 
-    ex_dicts = {"pd": pd, "data": data, "plt": plt, "filtered_data": None}
+    ex_dicts = {"pd": pd, "data": data, "plt": plt, "filtered_data": Union[Any, Dict]}
     globals_dict.update(ex_dicts)
     return globals_dict
 
@@ -106,13 +108,15 @@ class ChartExecutor:
 
         charts = []
         code_spec_copy = code_specs.copy()
-        code_specs = [preprocess_code(code) for code in code_specs]
+        code_specs = [preprocess_code(code, library) for code in code_specs]
         if library == "altair":
             for code in code_specs:
                 try:
                     ex_locals = get_globals_dict(code, data)
                     exec(code, ex_locals)
                     chart = ex_locals["chart"]
+                    filtered_data = ex_locals["filtered_data"]
+                    filtered_data = filtered_data.to_dict('split')
                     vega_spec = chart.to_dict()
                     del vega_spec["data"]
                     if "datasets" in vega_spec:
@@ -126,6 +130,7 @@ class ChartExecutor:
                             raster=None,
                             code=code,
                             library=library,
+                            filtered_data=filtered_data
                         )
                     )
                 except Exception as exception_error:
@@ -264,6 +269,45 @@ class ChartExecutor:
                 except Exception as exception_error:
                     print(code)
                     print(traceback.format_exc())
+                    if return_error:
+                        charts.append(
+                            ChartExecutorResponse(
+                                spec=None,
+                                status=False,
+                                raster=None,
+                                code=code,
+                                library=library,
+                                error={
+                                    "message": str(exception_error),
+                                    "traceback": traceback.format_exc(),
+                                },
+                            )
+                        )
+            return charts
+        
+        elif library == "sqlike":
+            for code in code_specs:
+                try:
+                    ex_locals = get_globals_dict(code, data)
+                    # print(ex_locals)
+                    exec(code, ex_locals)
+                    filtered_data = ex_locals["filtered_data"]
+                    filtered_data = filtered_data.to_dict('split')
+                    print(filtered_data)
+                    charts.append(
+                        ChartExecutorResponse(
+                            spec=None,
+                            status=True,
+                            raster=None,
+                            code=code,
+                            library=library,
+                            filtered_data=filtered_data
+                        )
+                    )
+                except Exception as exception_error:
+                    print(code_spec_copy[0])
+                    print("****\n", str(exception_error))
+                    # print(traceback.format_exc())
                     if return_error:
                         charts.append(
                             ChartExecutorResponse(
