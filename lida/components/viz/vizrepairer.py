@@ -23,6 +23,8 @@ class VizRepairer(object):
             goal: Goal, summary: Summary, textgen_config: TextGenerationConfig,
             text_gen: TextGenerator, library='altair',):
         """Fix a code spec based on feedback"""
+
+        print('REPAIR', library)
         library_template, library_instructions = self.scaffold.get_template(Goal(
             index=0,
             question="",
@@ -33,7 +35,7 @@ class VizRepairer(object):
             {"role": "system", "content": f"The dataset summary is : {summary}. \n . The original goal was: {goal}."},
             {"role": "system",
              "content":
-             f"You MUST use only the {library}. The resulting code MUST use the following template {library_template}. Only use variables that have been defined in the code or are in the dataset summary"},
+             f"The resulting code MUST use the following template {library_template}. Only use variables that have been defined in the code or are in the dataset summary"},
             {"role": "user", "content": f"The existing code to be fixed is: {code}. \n Fix the code above to address the feedback: {feedback}. ONLY apply feedback that are CORRECT."}]
 
         # library with the following instructions {library_instructions}

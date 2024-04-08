@@ -19,6 +19,7 @@ from ..components.persona import PersonaExplorer
 from ..components.executor import ChartExecutor
 from ..components.viz import VizGenerator, VizEditor, VizExplainer, VizEvaluator, VizRepairer, VizRecommender
 from ..components.transform import TransformData
+from ..components.search import SearchData
 
 import lida.web as lida
 
@@ -41,6 +42,7 @@ class Manager(object):
         self.goal = GoalExplorer()
         self.vizgen = VizGenerator()
         self.transform = TransformData()
+        self.search = SearchData();
         self.vizeditor = VizEditor()
         self.executor = ChartExecutor()
         self.explainer = VizExplainer()
@@ -213,6 +215,12 @@ class Manager(object):
             code_specs = self.transform.generate(
                 summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,
                 library=library)
+            
+        elif library == "search":
+            code_specs = self.search.generate(
+                summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,
+                library=library)
+            
         else:
             code_specs = self.vizgen.generate(
                 summary=summary, goal=goal, textgen_config=textgen_config, text_gen=self.text_gen,

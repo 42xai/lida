@@ -134,7 +134,7 @@ Solve the task carefully by completing ONLY the <stub> section.
 Given the dataset summary, the transform_data(data) method should generate a resultset that addresses this goal: '{goal.question}'. 
 DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.
 
-THE RESULT MUST BE ALWAYS A PANDAS OBJECT"""
+THE RESULT MUST BE ALWAYS A PANDAS DICTIONARY"""
             instructions = {
                 "role": "assistant",
                 "content": f"{instruct}. "}
@@ -146,9 +146,37 @@ import pandas as pd
 # transform the data using pandas
 def transform_data(data: pd.DataFrame):
     mutated_data = <stub>
+
+    # return a pandas dict
     return mutated_data
 
 filtered_data = transform_data(data)"""
+            
+        elif library == "search":
+            instruct = \
+                f"""
+Solve the task carefully by completing ONLY the <stub> section. 
+Given the dataset summary, the find_in_data(data) method should generate a resultset that addresses this goal: '{goal.question}'. 
+DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.
+
+ALWAYS USE REGULAR EXPRESSIONS TO MATCH THE FIELD VALUES.
+THE RESULT MUST BE ALWAYS A PANDAS DICTIONARY.
+"""
+            instructions = {
+                "role": "assistant",
+                "content": f"{instruct}. "}
+
+            template = \
+                f"""
+import pandas as pd
+
+# find in the data using pandas
+def find_in_data(data: pd.DataFrame):
+    data_result = <stub>
+    # return a pandas dict
+    return data_result
+
+filtered_data = find_in_data(data)"""
         
         else:
             raise ValueError(

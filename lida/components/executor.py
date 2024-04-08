@@ -44,7 +44,7 @@ def preprocess_code(code: str, library: str) -> str:
 
     code = code.replace("```", "")
     
-    if library != "sqlike" and "chart = plot(filtered_data)" not in code:
+    if library != "sqlike" and library != "search" and "chart = plot(filtered_data)" not in code:
         code = code + "\nchart = plot(filtered_data)"
         
     return code
@@ -294,6 +294,44 @@ class ChartExecutor:
                     filtered_data = ex_locals["filtered_data"]
                     filtered_data = filtered_data.to_dict('split')
                     print(filtered_data)
+                    charts.append(
+                        ChartExecutorResponse(
+                            spec=None,
+                            status=True,
+                            raster=None,
+                            code=code,
+                            library=library,
+                            filtered_data=filtered_data
+                        )
+                    )
+                except Exception as exception_error:
+                    print(code_spec_copy[0])
+                    print("****\n", str(exception_error))
+                    # print(traceback.format_exc())
+                    if return_error:
+                        charts.append(
+                            ChartExecutorResponse(
+                                spec=None,
+                                status=False,
+                                raster=None,
+                                code=code,
+                                library=library,
+                                error={
+                                    "message": str(exception_error),
+                                    "traceback": traceback.format_exc(),
+                                },
+                            )
+                        )
+            return charts
+        
+        elif library == "search":
+            for code in code_specs:
+                try:
+                    ex_locals = get_globals_dict(code, data)
+                    # print(ex_locals)
+                    exec(code, ex_locals)
+                    filtered_data = ex_locals["filtered_data"]
+                    filtered_data = filtered_data.to_dict('split')
                     charts.append(
                         ChartExecutorResponse(
                             spec=None,

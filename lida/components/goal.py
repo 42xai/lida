@@ -13,10 +13,13 @@ FORMAT_INSTRUCTIONS = """
 THE OUTPUT MUST BE A CODE SNIPPET OF A VALID LIST OF JSON OBJECTS. IT MUST USE THE FOLLOWING FORMAT:
 
 ```[
-    { "index": 0,  "question": "What is the distribution of X", "visualization": "histogram of X", "rationale": "This tells about "} ..
+    { "index": 0,  "question": "What is the distribution of X 📮", "visualization": "histogram of X", "rationale": "This tells about "} ..
     ]
 ```
 THE OUTPUT SHOULD ONLY USE THE JSON FORMAT ABOVE.
+
+End questions with different emojis.
+Respond in spanish 🇪🇸.
 """
 
 logger = logging.getLogger("lida")

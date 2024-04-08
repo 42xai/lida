@@ -6,13 +6,13 @@ from .scaffold import ChartScaffold
 from lida.datamodel import Goal
 
 system_prompt = """
-You are a helpful assistant highly skilled in writing PERFECT code for transform and manipulate data. Given some code template, you complete the template to generate a transformation given the dataset and the goal described. The code you write MUST FOLLOW BEST PRACTICES ie. meet the specified goal, apply the right transformation and use the right data encoding. 
+You are a helpful assistant highly skilled in writing PERFECT code for find and manipulate data. Given some code template, you complete the template to generate a transformation given the dataset and the question described. The code you write MUST FOLLOW BEST PRACTICES ie. meet the specified goal, apply the right transformation and use the right data encoding. 
 The transformations you apply MUST be correct and the fields you use MUST be correct. 
 The CODE MUST BE CORRECT and MUST NOT CONTAIN ANY SYNTAX OR LOGIC ERRORS (e.g., it must consider the field types and use them correctly). 
 """
 
 
-class TransformData(object):
+class SearchData(object):
     """Transform data from prompt"""
 
     def __init__(
@@ -22,10 +22,10 @@ class TransformData(object):
         self.scaffold = ChartScaffold()
 
     def generate(self, summary: Dict, goal: Goal,
-                 textgen_config: TextGenerationConfig, text_gen: TextGenerator, library='sqlike'):
+                 textgen_config: TextGenerationConfig, text_gen: TextGenerator, library='search'):
         """Transform data in code given a summary and a goal"""
 
-        print("TRANSFORM RUNNING")
+        print("SEARCH RUNNING")
         library_template, library_instructions = self.scaffold.get_template(goal, library)
         messages = [
             {"role": "system", "content": system_prompt},
@@ -33,7 +33,7 @@ class TransformData(object):
             library_instructions,
             {"role": "user",
              "content":
-              f"The transformation code MUST only use data fields that exist in the dataset (field_names) or fields that are transformations based on existing field_names). Only use variables that have been defined in the code or are in the dataset summary. You MUST return a FULL PYTHON PROGRAM ENCLOSED IN BACKTICKS ``` that starts with an import statement. DO NOT add any explanation. \n\n THE GENERATED CODE SOLUTION SHOULD BE CREATED BY MODIFYING THE SPECIFIED PARTS OF THE TEMPLATE BELOW \n\n {library_template} \n\n.The FINAL COMPLETED CODE BASED ON THE TEMPLATE above is ... \n\n"}]
+              f"The search code MUST only use data fields that exist in the dataset (field_names) or fields that are transformations based on existing field_names). Only use variables that have been defined in the code or are in the dataset summary. You MUST return a FULL PYTHON PROGRAM ENCLOSED IN BACKTICKS ``` that starts with an import statement. DO NOT add any explanation. \n\n THE GENERATED CODE SOLUTION SHOULD BE CREATED BY MODIFYING THE SPECIFIED PARTS OF THE TEMPLATE BELOW \n\n {library_template} \n\n.The FINAL COMPLETED CODE BASED ON THE TEMPLATE above is ... \n\n"}]
 
         completions: TextGenerationResponse = text_gen.generate(
             messages=messages, config=textgen_config)
