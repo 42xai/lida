@@ -325,3 +325,34 @@ async def generate_infographics(req: InfographicsRequest) -> dict:
 @api.get("/models")
 def list_models() -> dict:
     return {"status": True, "data": providers, "message": "Successfully listed models"}
+
+
+@api.post("/panda")
+async def generate_pandaset(file: UploadFile) -> dict:
+    """ Upload a file and return a summary of the data """
+    # allow csv, excel, json
+    allowed_types = ["text/csv", "application/json"]
+
+    # print("file: ", file)
+    # check file type
+    if file.content_type not in allowed_types:
+        return {"status": False,
+                "message": f"Uploaded file type ({file.content_type}) not allowed. Allowed types are: csv, excel, json"}
+
+    try:
+
+        # save file to files folder
+        file_location = os.path.join(data_folder, file.filename)
+        # open file without deleting existing contents
+        with open(file_location, "wb+") as file_object:
+            file_object.write(file.file.read())
+
+        # summarize       
+        summary = lida.panda.summarize(
+            data=file_location,
+            file_name=file.filename,
+        )
+        return {"status": True, "summary": summary, "data_filename": file.filename}
+    except Exception as exception_error:
+        logger.error(f"Error processing file: {str(exception_error)}")
+        return {"status": False, "message": f"Error processing file."}

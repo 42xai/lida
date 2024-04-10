@@ -20,6 +20,7 @@ from ..components.executor import ChartExecutor
 from ..components.viz import VizGenerator, VizEditor, VizExplainer, VizEvaluator, VizRepairer, VizRecommender
 from ..components.transform import TransformData
 from ..components.search import SearchData
+from ..components.panda import Panda
 
 import lida.web as lida
 
@@ -48,6 +49,7 @@ class Manager(object):
         self.explainer = VizExplainer()
         self.evaluator = VizEvaluator()
         self.repairer = VizRepairer()
+        self.panda = Panda()
         self.recommender = VizRecommender()
         self.data = None
         self.infographer = None
