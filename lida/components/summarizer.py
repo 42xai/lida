@@ -6,14 +6,24 @@ from lida.utils import clean_code_snippet, read_dataframe
 from lida.datamodel import TextGenerationConfig
 from llmx import TextGenerator
 import warnings
+import sys
+
+# system_prompt = """
+# You are an experienced data analyst that can annotate datasets. Your instructions are as follows:
+# i) ALWAYS generate the name of the dataset
+# ii) ALWAYS generate a dataset_description
+# iii) ALWAYS generate a field description.
+# iv) ALWAYS generate a semantic_type (a single word) for each field given its values e.g. company, city, number, supplier, location, gender, longitude, latitude, url, ip address, zip code, email, etc
+# You must return an updated JSON dictionary without any preamble or explanation.
+# """
 
 system_prompt = """
 You are an experienced data analyst that can annotate datasets. Your instructions are as follows:
 i) ALWAYS generate the name of the dataset
 ii) ALWAYS generate a dataset_description
 iii) ALWAYS generate a field description.
-iv) ALWAYS generate a semantic_type (a single word) for each field given its values e.g. company, city, number, supplier, location, gender, longitude, latitude, url, ip address, zip code, email, etc
-You must return an updated JSON dictionary without any preamble or explanation.
+iv) ALWAYS generate a postgres_type (a single word) for each field given its values based on PostreSQL data types.
+You must return an updated JSON dictionary without any preamble or explanation. Do not format.
 """
 
 logger = logging.getLogger("lida")
@@ -35,6 +45,7 @@ class Summarizer():
     def get_column_properties(self, df: pd.DataFrame, n_samples: int = 3) -> list[dict]:
         """Get properties of each column in a pandas DataFrame"""
         properties_list = []
+        df = df.applymap(lambda x: x.strip() if type(x) == str else x)
         for column in df.columns:
             dtype = df[column].dtype
             properties = {}
@@ -134,7 +145,7 @@ class Summarizer():
         base_summary = {
             "name": file_name,
             "file_name": file_name,
-            "dataset_description": "",
+            "dataset_description": "...",
             "fields": data_properties,
         }
 

@@ -159,7 +159,7 @@ Solve the task carefully by completing ONLY the <stub> section.
 Given the dataset summary, the find_in_data(data) method should generate a resultset that addresses this goal: '{goal.question}'. 
 DO NOT WRITE ANY CODE TO LOAD THE DATA. The data is already loaded and available in the variable data.
 
-ALWAYS USE REGULAR EXPRESSIONS TO MATCH THE FIELD VALUES.
+ALWAYS USE REGULAR EXPRESSIONS TO MATCH THE FIELD VALUES, SPLIT EACH WORD IN DIFFERENT CASES.
 THE RESULT MUST BE ALWAYS A PANDAS DICTIONARY.
 """
             instructions = {
