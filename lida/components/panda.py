@@ -63,7 +63,7 @@ class Panda():
                     properties["min"] = df[column].min()
                     properties["max"] = df[column].max()
                 except TypeError:
-                    cast_date_col = pd.to_datetime(df[column], errors='coerce')
+                    cast_date_col = pd.to_datetime(df[column], errors='coerce', utc=True)
                     properties["min"] = cast_date_col.min()
                     properties["max"] = cast_date_col.max()
             # Add additional properties to the output dictionary
