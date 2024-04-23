@@ -75,8 +75,8 @@ class Panda():
                     n_samples, random_state=42).tolist()
                 properties["samples"] = samples
             properties["num_unique_values"] = nunique
-            properties["postgres_type"] = ""
-            properties["description"] = ""
+            properties["postgres_type"] = "..."
+            properties["description"] = "..."
             properties_list.append(
                 {"column": column, "properties": properties})
 
@@ -107,7 +107,5 @@ class Panda():
             "fields": data_properties,
             "field_names": data.columns.tolist(),
         }
-
-        print(base_summary);
 
         return base_summary
