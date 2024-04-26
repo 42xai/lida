@@ -25,7 +25,7 @@ class Panda():
     def get_column_properties(self, df: pd.DataFrame, n_samples: int = 3) -> list[dict]:
         """Get properties of each column in a pandas DataFrame"""
         properties_list = []
-        df = df.applymap(lambda x: x.strip() if type(x) == str else x)
+
         for column in df.columns:
             dtype = df[column].dtype
             properties = {}
@@ -70,9 +70,8 @@ class Panda():
             nunique = df[column].nunique()
             if "samples" not in properties:
                 non_null_values = df[column][df[column].notnull()].unique()
-                n_samples = min(n_samples, len(non_null_values))
-                samples = pd.Series(non_null_values).sample(
-                    n_samples, random_state=42).tolist()
+                m_samples = min(n_samples, len(non_null_values))
+                samples = pd.Series(non_null_values).sample(m_samples, random_state=42).tolist()
                 properties["samples"] = samples
             properties["num_unique_values"] = nunique
             properties["postgres_type"] = "..."
