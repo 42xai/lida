@@ -355,4 +355,5 @@ async def generate_pandaset(file: UploadFile) -> dict:
         return {"status": True, "summary": summary, "data_filename": file.filename}
     except Exception as exception_error:
         logger.error(f"Error processing file: {str(exception_error)}")
+        print(traceback.format_exc())
         return {"status": False, "message": f"Error processing file."}

@@ -50,6 +50,8 @@ class Panda():
                         properties["dtype"] = "category"
                     else:
                         properties["dtype"] = "string"
+                except Exception:
+                   properties["dtype"] = "string"
             elif pd.api.types.is_categorical_dtype(df[column]):
                 properties["dtype"] = "category"
             elif pd.api.types.is_datetime64_any_dtype(df[column]):
