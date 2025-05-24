@@ -14,7 +14,7 @@ spec:
 
       containers:
         - name: lida
-          image: ghcr.io/42xai/lida:main
+          image: ghcr.io/42xai/lida
           ports:
             - containerPort: 8080
 
