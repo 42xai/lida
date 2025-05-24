@@ -1,5 +1,10 @@
 # LIDA: Automatic Generation of Visualizations and Infographics using Large Language Models
 
+[![Build and push Lida](https://github.com/42xai/lida/actions/workflows/build-and-push.yaml/badge.svg)](https://github.com/42xai/lida/actions/workflows/build-and-push.yaml)
+[![ArgoCD Application Status](https://argo.42x.ai/api/badge?name=lida&revision=true&showAppName=true)](https://argo.42x.ai/applications/argocd/lida)
+
+---
+
 [![PyPI version](https://badge.fury.io/py/lida.svg)](https://badge.fury.io/py/lida)
 [![arXiv](https://img.shields.io/badge/arXiv-2303.02927-<COLOR>.svg)](https://arxiv.org/abs/2303.02927)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/lida?label=pypi%20downloads)
@@ -46,7 +51,7 @@ charts = lida.visualize(summary=summary, goal=goals[0]) # exploratory data analy
 Setup and verify that your python environment is **`python 3.10`** or higher (preferably, use [Conda](https://docs.conda.io/en/main/miniconda.html#installing)). Install the library via pip.
 
 ```bash
-pip install -U lida 
+pip install -U lida
 ```
 
 LIDA depends on `llmx` and `openai`. If you had these libraries installed previously, consider updating them.
