@@ -7,5 +7,5 @@ spec:
   type: NodePort
   ports:
     - port: 8888
-      targetPort: 88888
+      targetPort: 8888
 
