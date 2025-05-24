@@ -1,15 +1,20 @@
 name: Build and push Lida
-run-name: "${{ github.event.head_commit.message || 'No commit message' }} -- <${{ github.ref_name }}> by @${{ github.actor }}"
+run-name: "${{ github.event.head_commit.message || 'No commit message' }}"
 
 on:
   workflow_dispatch:
+    inputs:
+      trigger_reason:
+        description: "Why are you running this workflow?"
+        required: false
+        default: "Manual run"
   push:
     branches:
       - 'main'
     paths-ignore:
+      - 'k8s/**'
       - '**.md'
       - '**/*.md'
-      - 'k8s/**'
 
 env:
   REGISTRY: ghcr.io
@@ -43,6 +48,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=main,enable={{is_default_branch}}
 
       - name: Build and push
         uses: docker/build-push-action@v5
