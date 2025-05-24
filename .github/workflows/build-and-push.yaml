@@ -1,4 +1,4 @@
-name: Build and push K8s Example App
+name: Build and push Lida
 run-name: "${{ github.event.head_commit.message || 'No commit message' }} -- <${{ github.ref_name }}> by @${{ github.actor }}"
 
 on:
