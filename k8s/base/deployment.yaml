@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lida
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      imagePullSecrets:
+        - name: github-pull-secret
+
+      containers:
+        - name: lida
+          image: ghcr.io/42xai/lida:main
+          ports:
+            - containerPort: 80
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
