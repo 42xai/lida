@@ -15,7 +15,11 @@ spec:
         - name: lida
           image: ghcr.io/42xai/lida:main
           ports:
-            - containerPort: 80
+            - containerPort: 8888
+
+          envFrom:
+            - secretRef:
+              name: lida-sec
 
           resources:
             requests:

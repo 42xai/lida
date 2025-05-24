@@ -8,5 +8,6 @@ commonLabels:
 
 resources:
 - namespace.yaml
+- secret_enc.yaml
 - service.yaml
 - deployment.yaml
