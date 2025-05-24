@@ -9,6 +9,7 @@ on:
     paths-ignore:
       - '**.md'
       - '**/*.md'
+      - 'k8s/**'
 
 env:
   REGISTRY: ghcr.io
