@@ -1,10 +1,14 @@
-name: Build and push Docker image
-run-name: Build and push to Github container registry
+name: Build and push K8s Example App
+run-name: "${{ github.event.head_commit.message || 'No commit message' }} -- <${{ github.ref_name }}> by @${{ github.actor }}"
+
 on:
   workflow_dispatch:
   push:
     branches:
       - 'main'
+    paths-ignore:
+      - '**.md'
+      - '**/*.md'
 
 env:
   REGISTRY: ghcr.io
