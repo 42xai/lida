@@ -20,7 +20,7 @@ spec:
 
           envFrom:
             - secretRef:
-              name: lida-sec
+                name: lida-sec
 
           resources:
             requests:
